@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Heist
 {
@@ -7,6 +9,7 @@ namespace Heist
         static void Main(string[] args)
         {
             Console.WriteLine("Plan Your Heist!");
+            Bank TargetBank = new Bank();
             Team HeistTeam = new Team();
             //Create first team member
             do
@@ -22,23 +25,35 @@ namespace Heist
                 //Create new member
                 newMember.Name = newMemberName;
                 Console.WriteLine("Enter Team member's skill level");
-                newMember.SkillLevel = UInt32.Parse(Console.ReadLine());
+                newMember.SkillLevel = Int32.Parse(Console.ReadLine());
                 Console.WriteLine("Enter team member's courage factor");
                 newMember.CourageFactor = Double.Parse(Console.ReadLine());
                 HeistTeam.MemberList.Add(newMember);
                 //Display team member
             }} while(true);
 
-            //Display team details
+            //Compute success||Failure
             Console.WriteLine($"Heisting with {HeistTeam.MemberList.Count} members");
-            Console.WriteLine("----------------THE TEAM----------------");
-            foreach(Member member in HeistTeam.MemberList)
+            IEnumerable<int> totalSkillIE = HeistTeam.MemberList.Select(m => m.SkillLevel);
+            int totalSkill = totalSkillIE.Sum();
+            if(totalSkill >= TargetBank.Difficulty)
             {
-                Console.WriteLine($"{member.Name}");
-                Console.WriteLine($"Skill Level: {member.SkillLevel}");
-                Console.WriteLine($"Courage Factor: {member.CourageFactor}");
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine("Heist Successful!");
             }
+            else
+            {
+                Console.WriteLine("You got caught.");
+            }
+
+            //Display team information
+            // Console.WriteLine("----------------THE TEAM----------------");
+            // foreach(Member member in HeistTeam.MemberList)
+            // {
+            //     Console.WriteLine($"{member.Name}");
+            //     Console.WriteLine($"Skill Level: {member.SkillLevel}");
+            //     Console.WriteLine($"Courage Factor: {member.CourageFactor}");
+            //     Console.WriteLine("--------------------------------");
+            // }
         }
     }
 }
